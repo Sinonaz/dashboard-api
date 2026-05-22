@@ -5,7 +5,7 @@ import { IRoute } from "./route.interface";
 export abstract class BaseController {
   private readonly _router: Router;
 
-  constructor(private logger: LoggerService) {
+  protected constructor(private logger: LoggerService) {
     this._router = Router();
   }
 
@@ -28,7 +28,7 @@ export abstract class BaseController {
   protected bindRoutes(routes: IRoute[]) {
     for (const route of routes) {
       this.router[route.method](route.path, route.cb.bind(this));
-      this.logger.log(`Route ${ route.method } ${ route.path }`);
+      this.logger.log(`Route [${ route.method }] ${ route.path }`);
     }
   }
 }
