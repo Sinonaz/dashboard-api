@@ -1,6 +1,7 @@
 import { BaseController } from "../common/base.controller";
 import { LoggerService } from "../logger/logger.service";
 import { NextFunction, Request, Response } from "express";
+import { HttpError } from "../errors/http-error.class";
 
 export class UsersController extends BaseController {
 
@@ -21,7 +22,8 @@ export class UsersController extends BaseController {
   }
 
   login(req: Request, res: Response, next: NextFunction) {
-    this.ok(res, { message: "Login successful" });
+    // this.ok(res, { message: "Login successful" });
+    next(new HttpError("Login failed", 401, "LoginController"));
   }
 
   register(req: Request, res: Response, next: NextFunction) {
