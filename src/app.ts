@@ -15,8 +15,8 @@ export class App {
 
 	constructor(
 		@inject(TYPES.ILogger) private logger: ILogger,
-		@inject(TYPES.IUserController) private userController: UserController,
-		@inject(TYPES.IExceptionFilter) private readonly exceptionFilter: ExceptionFilter,
+		@inject(TYPES.UserController) private userController: UserController,
+		@inject(TYPES.ExceptionFilter) private readonly exceptionFilter: ExceptionFilter,
 	) {
 		this.app = express();
 		this.port = 8000;
@@ -31,6 +31,7 @@ export class App {
 	}
 
 	public async init(): Promise<void> {
+		this.app.use(express.json());
 		this.useRoutes();
 		this.useExceptionFilters();
 		this.server = this.app.listen(this.port);

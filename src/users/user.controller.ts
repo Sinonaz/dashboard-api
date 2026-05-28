@@ -6,16 +6,24 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../types';
 import 'reflect-metadata';
 import { IUserController } from './user.controller.interface';
+import { UserLoginDto } from './dto/user-login.dto';
+import { UserRegisterDto } from './dto/user-register.dto';
+import { UserService } from './user.service';
+import { ValidateMiddleware } from '../common/validate.middleware';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
-	constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
+	constructor(
+		@inject(TYPES.UserService) private userService: UserService,
+		@inject(TYPES.ILogger) private loggerService: ILogger,
+	) {
 		super(loggerService);
 		this.bindRoutes([
 			{
 				path: '/register',
 				method: 'post',
 				cb: this.register,
+				middlewares: [new ValidateMiddleware(UserRegisterDto)],
 			},
 			{
 				path: '/login',
@@ -25,12 +33,31 @@ export class UserController extends BaseController implements IUserController {
 		]);
 	}
 
-	login(req: Request, res: Response, next: NextFunction): void {
-		// this.ok(res, { message: "Login successful" });
-		next(new HttpError('Login failed', 401, 'LoginController'));
+	login(
+		{ body }: Request<unknown, unknown, UserLoginDto>,
+		res: Response,
+		next: NextFunction,
+	): void {
+		console.log(body);
+		this.ok(res, { message: 'Login successful' });
 	}
 
-	register(req: Request, res: Response, next: NextFunction): void {
-		this.ok(res, { message: 'Register successful' });
+	async register(
+		{ body }: Request<unknown, unknown, UserRegisterDto>,
+		res: Response,
+		next: NextFunction,
+	): Promise<void> {
+		const result = await this.userService.create(body);
+
+		if (!result) {
+			return next(new HttpError('User registration failed', 422));
+		}
+
+		this.ok(res, {
+			message: 'Register successful',
+			user: {
+				email: result.email,
+			},
+		});
 	}
 }
