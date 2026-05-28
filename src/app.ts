@@ -15,7 +15,7 @@ export class App {
 
   constructor(
     @inject(TYPES.ILogger) private logger: ILogger,
-    @inject(TYPES.UserController) private userController: UserController,
+    @inject(TYPES.IUserController) private userController: UserController,
     @inject(TYPES.IExceptionFilter) private readonly exceptionFilter: ExceptionFilter
   ) {
     this.app = express();
