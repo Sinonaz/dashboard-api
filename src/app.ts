@@ -1,12 +1,13 @@
 import express, { Express } from 'express';
 import * as http from 'node:http';
-import { UserController } from './users/user.controller';
-import { ILogger } from './logger/logger.interface';
+import { UserController } from './users/user.controller.js';
+import { ILogger } from './logger/logger.interface.js';
 import { inject, injectable } from 'inversify';
-import { TYPES } from './types';
+import { TYPES } from './types.js';
 import 'reflect-metadata';
-import { IConfigService } from './config/config.service.interface';
-import { IExceptionFilter } from './errors/exception.filter.interface';
+import { IConfigService } from './config/config.service.interface.js';
+import { IExceptionFilter } from './errors/exception.filter.interface.js';
+import { PrismaService } from './database/prisma.service.js';
 
 @injectable()
 export class App {
@@ -15,13 +16,14 @@ export class App {
 	server: http.Server;
 
 	constructor(
+		@inject(TYPES.PrismaService) private prismaService: PrismaService,
 		@inject(TYPES.ILogger) private logger: ILogger,
 		@inject(TYPES.UserController) private userController: UserController,
 		@inject(TYPES.ExceptionFilter) private readonly exceptionFilter: IExceptionFilter,
 		@inject(TYPES.ConfigService) private configService: IConfigService,
 	) {
 		this.app = express();
-		this.port = 8000;
+		this.port = Number(this.configService.get('PORT'));
 	}
 
 	useRoutes(): void {
@@ -34,6 +36,7 @@ export class App {
 
 	public async init(): Promise<void> {
 		this.app.use(express.json());
+		await this.prismaService.connect();
 		this.useRoutes();
 		this.useExceptionFilters();
 		this.server = this.app.listen(this.port);

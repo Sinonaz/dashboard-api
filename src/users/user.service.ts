@@ -1,9 +1,9 @@
-import { IUserService } from './user.service.interface';
-import { UserRegisterDto } from './dto/user-register.dto';
-import { UserEntity } from './user.entity';
+import { IUserService } from './user.service.interface.js';
+import { UserRegisterDto } from './dto/user-register.dto.js';
+import { UserEntity } from './user.entity.js';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../types';
-import { IConfigService } from '../config/config.service.interface';
+import { TYPES } from '../types.js';
+import { IConfigService } from '../config/config.service.interface.js';
 
 @injectable()
 export class UserService implements IUserService {

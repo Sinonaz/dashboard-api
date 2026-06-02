@@ -1,16 +1,17 @@
-import { App } from './app';
-import { LoggerService } from './logger/logger.service';
-import { UserController } from './users/user.controller';
-import { ExceptionFilter } from './errors/exception.filter';
+import { App } from './app.js';
+import { LoggerService } from './logger/logger.service.js';
+import { UserController } from './users/user.controller.js';
+import { ExceptionFilter } from './errors/exception.filter.js';
 import { ContainerModule, Container } from 'inversify';
-import { ILogger } from './logger/logger.interface';
-import { TYPES } from './types';
-import { IExceptionFilter } from './errors/exception.filter.interface';
-import { IUserController } from './users/user.controller.interface';
-import { IUserService } from './users/user.service.interface';
-import { UserService } from './users/user.service';
-import { ConfigService } from './config/config.service';
-import { IConfigService } from './config/config.service.interface';
+import { ILogger } from './logger/logger.interface.js';
+import { TYPES } from './types.js';
+import { IExceptionFilter } from './errors/exception.filter.interface.js';
+import { IUserController } from './users/user.controller.interface.js';
+import { IUserService } from './users/user.service.interface.js';
+import { UserService } from './users/user.service.js';
+import { ConfigService } from './config/config.service.js';
+import { IConfigService } from './config/config.service.interface.js';
+import { PrismaService } from './database/prisma.service.js';
 
 function bootstrap(): { app: App; appContainer: Container } {
 	const appContainer = new Container();
@@ -21,6 +22,7 @@ function bootstrap(): { app: App; appContainer: Container } {
 }
 
 export const appBindings = new ContainerModule(({ bind }) => {
+	bind<PrismaService>(TYPES.PrismaService).to(PrismaService).inSingletonScope();
 	bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
 	bind<IExceptionFilter>(TYPES.ExceptionFilter).to(ExceptionFilter).inSingletonScope();
 	bind<IUserController>(TYPES.UserController).to(UserController).inSingletonScope();
