@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "email": "aziksimpson@gmail.com",
-  "password": "",
-  "name": ""
+  "password": "666",
+  "name": "Isaac"
 }
 
 ### Login
