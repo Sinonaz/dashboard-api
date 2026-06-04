@@ -29,16 +29,23 @@ export class UserController extends BaseController implements IUserController {
 				path: '/login',
 				method: 'post',
 				cb: this.login,
+				middlewares: [new ValidateMiddleware(UserLoginDto)],
 			},
 		]);
 	}
 
-	login(
+	async login(
 		{ body }: Request<unknown, unknown, UserLoginDto>,
 		res: Response,
 		next: NextFunction,
-	): void {
-		console.log(body);
+	): Promise<void> {
+		const { email, password } = body;
+		const result = await this.userService.validate({ email, password });
+
+		if (!result) {
+			return next(new HttpError('Invalid credentials', 401));
+		}
+
 		this.ok(res, { message: 'Login successful' });
 	}
 
@@ -56,6 +63,7 @@ export class UserController extends BaseController implements IUserController {
 		this.ok(res, {
 			message: 'Register successful',
 			user: {
+				id: result.id,
 				email: result.email,
 			},
 		});
