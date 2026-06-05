@@ -1,12 +1,18 @@
 import eslint from '@eslint/js';
 import tsEslint from 'typescript-eslint';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
 
 export default tsEslint.config(
 	eslint.configs.recommended,
 	...tsEslint.configs.recommended,
 	eslintPluginPrettierRecommended,
 	{
+		languageOptions: {
+			globals: {
+				...globals.node,
+			},
+		},
 		rules: {
 			'@typescript-eslint/ban-types': 'off',
 			'@typescript-eslint/no-unused-vars': ['off'],

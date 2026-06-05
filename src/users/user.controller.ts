@@ -10,10 +10,10 @@ import { UserLoginDto } from './dto/user-login.dto.js';
 import { UserRegisterDto } from './dto/user-register.dto.js';
 import { UserService } from './user.service.js';
 import { ValidateMiddleware } from '../common/validate.middleware.js';
-import pkg from "jsonwebtoken";
+import pkg from 'jsonwebtoken';
 const jwt = pkg;
-import { IConfigService } from "../config/config.service.interface.js";
-import { AuthGuard } from "../common/auth.guard.js";
+import { IConfigService } from '../config/config.service.interface.js';
+import { AuthGuard } from '../common/auth.guard.js';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
@@ -40,7 +40,7 @@ export class UserController extends BaseController implements IUserController {
 				path: '/info',
 				method: 'get',
 				cb: this.info,
-				middlewares: [new AuthGuard()]
+				middlewares: [new AuthGuard()],
 			},
 		]);
 	}
@@ -81,34 +81,35 @@ export class UserController extends BaseController implements IUserController {
 		});
 	}
 
-	async info(
-			{ user: email }: Request,
-			res: Response,
-			next: NextFunction,
-		): Promise<void> {
-			if (!email) {
-				return next(new HttpError('User not found', 404));
-			}
-
-			const user = await this.userService.getUser(email);
-
-			this.ok(res, { user });
+	async info({ user: email }: Request, res: Response, next: NextFunction): Promise<void> {
+		if (!email) {
+			return next(new HttpError('User not found', 404));
 		}
 
-	private async signJWT(email: string, sekret: string): Promise<string>	 {
-		return new Promise<string>((resolve, reject) => {
-			jwt.sign({
-				email,
-				iat: Math.floor(Date.now() / 1000),
-			}, sekret, {
-				algorithm: 'HS256'
-			}, (err, token) => {
-				if (err) {
-					reject(err)
-				}
+		const user = await this.userService.getUser(email);
 
-				resolve(token as string)
-			})
-		})
+		this.ok(res, { user });
+	}
+
+	private async signJWT(email: string, sekret: string): Promise<string> {
+		return new Promise<string>((resolve, reject) => {
+			jwt.sign(
+				{
+					email,
+					iat: Math.floor(Date.now() / 1000),
+				},
+				sekret,
+				{
+					algorithm: 'HS256',
+				},
+				(err, token) => {
+					if (err) {
+						reject(err);
+					}
+
+					resolve(token as string);
+				},
+			);
+		});
 	}
 }

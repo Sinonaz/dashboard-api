@@ -1,4 +1,4 @@
-import { compare, hash, hashSync } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 
 export class UserEntity {
 	private _password: string;
