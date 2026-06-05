@@ -1,5 +1,5 @@
 ### Register
-POST http://localhost:8000/users/register
+POST {{host}}/users/register
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### Login
-POST http://localhost:8000/users/login
+POST {{host}}/users/login
 Content-Type: application/json
 
 {
@@ -18,5 +18,5 @@ Content-Type: application/json
 }
 
 ### Info
-GET http://localhost:8000/users/info
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImF6aWtzaW1wc29uQGdtYWlsLmNvbSIsImlhdCI6MTc4MDY1ODgzMn0.wGZxz6fuZSvwCccoQRfar2kO0jEkULMdvQRfPX3QgZI
+GET {{host}}/users/info
+Authorization: Bearer {{token}}
