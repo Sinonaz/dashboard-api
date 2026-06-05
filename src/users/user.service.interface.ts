@@ -5,4 +5,5 @@ import { UserEntity } from './user.entity.js';
 export interface IUserService {
 	create: (dto: UserRegisterDto) => Promise<UserModel | null>;
 	validate: (dto: UserRegisterDto) => Promise<boolean>;
+	getUser: (email: string) => Promise<UserModel | null>;
 }

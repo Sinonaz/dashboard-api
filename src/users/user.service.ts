@@ -39,4 +39,8 @@ export class UserService implements IUserService {
 
 		return newUser.checkPassword(password);
 	}
+
+	async getUser(email: string): Promise<UserModel | null> {
+		return this.usersRepository.findByEmail(email);
+	}
 }

@@ -16,3 +16,7 @@ Content-Type: application/json
   "email": "aziksimpson@gmail.com",
   "password": "666"
 }
+
+### Info
+GET http://localhost:8000/users/info
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImF6aWtzaW1wc29uQGdtYWlsLmNvbSIsImlhdCI6MTc4MDY1ODgzMn0.wGZxz6fuZSvwCccoQRfar2kO0jEkULMdvQRfPX3QgZI
