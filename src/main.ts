@@ -15,11 +15,11 @@ import { PrismaService } from './database/prisma.service.js';
 import { UsersRepository } from './users/users.repository.js';
 import type { IUsersRepository } from './users/users.repository.interface.js';
 
-function bootstrap(): { app: App; appContainer: Container } {
+async function bootstrap(): Promise<{ app: App; appContainer: Container }> {
 	const appContainer = new Container();
 	appContainer.load(appBindings);
 	const app = appContainer.get<App>(TYPES.Application);
-	app.init();
+	await app.init();
 	return { app, appContainer };
 }
 
@@ -33,4 +33,4 @@ export const appBindings = new ContainerModule(({ bind }) => {
 	bind<IUsersRepository>(TYPES.UsersRepository).to(UsersRepository).inSingletonScope();
 	bind<App>(TYPES.Application).to(App).inSingletonScope();
 });
-export const { app, appContainer } = bootstrap();
+export const boot = bootstrap();
