@@ -21,6 +21,7 @@ const container = new Container();
 let configService: IConfigService;
 let usersRepository: IUsersRepository;
 let userService: IUserService;
+let createdUser: UserModel | null;
 
 beforeAll(() => {
 	container.bind<IUserService>(TYPES.UserService).to(UserService);
@@ -46,7 +47,7 @@ describe('User Service', () => {
 				});
 			});
 
-		const createdUser = await userService.create({
+		createdUser = await userService.create({
 			email: 'test@example.com',
 			password: '1',
 			name: 'Test User',
@@ -54,5 +55,41 @@ describe('User Service', () => {
 
 		expect(createdUser?.id).toEqual(1);
 		expect(createdUser?.password).not.toEqual('1');
+	});
+
+	it('should validate user with correct pass', async () => {
+		usersRepository.findByEmail = jest
+			.fn<() => Promise<UserModel | null>>()
+			.mockReturnValueOnce(Promise.resolve(createdUser));
+
+		const isValid = await userService.validate({
+			email: 'test@example.com',
+			password: '1',
+		});
+		expect(isValid).toBeTruthy();
+	});
+
+	it('should validate user with incorrect pass', async () => {
+		usersRepository.findByEmail = jest
+			.fn<() => Promise<UserModel | null>>()
+			.mockReturnValueOnce(Promise.resolve(createdUser));
+
+		const isValid = await userService.validate({
+			email: 'test@example.com',
+			password: 'wrong',
+		});
+		expect(isValid).toBeFalsy();
+	});
+
+	it('should validate user with wrong credentials', async () => {
+		usersRepository.findByEmail = jest
+			.fn<() => Promise<UserModel | null>>()
+			.mockReturnValueOnce(Promise.resolve(null));
+
+		const isValid = await userService.validate({
+			email: 'test@example.com',
+			password: '1',
+		});
+		expect(isValid).toBeFalsy();
 	});
 });
