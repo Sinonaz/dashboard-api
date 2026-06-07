@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types.js';
-import { ILogger } from '../logger/logger.interface.js';
+import type { ILogger } from '../logger/logger.interface.js';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient as PrismaClientT } from '../generated/prisma/internal/class.js';
+import type { PrismaClient as PrismaClientT } from '../generated/prisma/internal/class.js';
 import { PrismaClient } from '../generated/prisma/client.js';
 
 @injectable()

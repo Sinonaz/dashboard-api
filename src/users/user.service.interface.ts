@@ -1,6 +1,5 @@
-import { UserModel } from '../generated/prisma/client.js';
-import { UserRegisterDto } from './dto/user-register.dto.js';
-import { UserEntity } from './user.entity.js';
+import type { UserModel } from '../generated/prisma/client.js';
+import type { UserRegisterDto } from './dto/user-register.dto.js';
 
 export interface IUserService {
 	create: (dto: UserRegisterDto) => Promise<UserModel | null>;

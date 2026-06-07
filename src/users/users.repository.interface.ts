@@ -1,5 +1,5 @@
-import { UserModel } from '../generated/prisma/client.js';
-import { UserEntity } from './user.entity.js';
+import type { UserModel } from '../generated/prisma/client.js';
+import type { UserEntity } from './user.entity.js';
 
 export interface IUsersRepository {
 	create: (user: UserEntity) => Promise<UserModel>;

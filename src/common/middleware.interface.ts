@@ -1,4 +1,4 @@
-import { NextFunction, Response, Request } from 'express';
+import type { NextFunction, Response, Request } from 'express';
 
 export interface IMiddleware {
 	execute: (req: Request, res: Response, next: NextFunction) => void;

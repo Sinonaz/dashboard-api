@@ -1,12 +1,12 @@
-import { IUserService } from './user.service.interface.js';
-import { UserRegisterDto } from './dto/user-register.dto.js';
+import type { IUserService } from './user.service.interface.js';
+import type { UserRegisterDto } from './dto/user-register.dto.js';
 import { UserEntity } from './user.entity.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types.js';
-import { IConfigService } from '../config/config.service.interface.js';
-import { IUsersRepository } from './users.repository.interface.js';
-import { UserModel } from '../generated/prisma/client.js';
-import { UserLoginDto } from './dto/user-login.dto.js';
+import type { IConfigService } from '../config/config.service.interface.js';
+import type { IUsersRepository } from './users.repository.interface.js';
+import type { UserModel } from '../generated/prisma/client.js';
+import type { UserLoginDto } from './dto/user-login.dto.js';
 
 @injectable()
 export class UserService implements IUserService {

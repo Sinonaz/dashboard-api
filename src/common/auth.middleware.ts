@@ -1,5 +1,5 @@
-import { IMiddleware } from './middleware.interface.js';
-import { NextFunction, Request, Response } from 'express';
+import type { IMiddleware } from './middleware.interface.js';
+import type { NextFunction, Request, Response } from 'express';
 import pkg from 'jsonwebtoken';
 const { verify } = pkg;
 

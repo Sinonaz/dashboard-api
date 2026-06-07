@@ -1,12 +1,13 @@
-import express, { Express } from 'express';
-import * as http from 'node:http';
-import { UserController } from './users/user.controller.js';
-import { ILogger } from './logger/logger.interface.js';
+import express from 'express';
+import type { Express } from 'express';
+import type * as http from 'node:http';
+import type { UserController } from './users/user.controller.js';
+import type { ILogger } from './logger/logger.interface.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from './types.js';
 import 'reflect-metadata';
-import { IConfigService } from './config/config.service.interface.js';
-import { IExceptionFilter } from './errors/exception.filter.interface.js';
+import type { IConfigService } from './config/config.service.interface.js';
+import type { IExceptionFilter } from './errors/exception.filter.interface.js';
 import { PrismaService } from './database/prisma.service.js';
 import { AuthMiddleware } from './common/auth.middleware.js';
 

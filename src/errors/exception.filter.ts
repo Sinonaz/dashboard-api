@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
-import { IExceptionFilter } from './exception.filter.interface.js';
+import type { NextFunction, Request, Response } from 'express';
+import type { IExceptionFilter } from './exception.filter.interface.js';
 import { HttpError } from './http-error.class.js';
 import { inject, injectable } from 'inversify';
-import { ILogger } from '../logger/logger.interface.js';
+import type { ILogger } from '../logger/logger.interface.js';
 import { TYPES } from '../types.js';
 import 'reflect-metadata';
 

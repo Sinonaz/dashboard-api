@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { UserModel } from '../generated/prisma/client.js';
-import { UserEntity } from './user.entity.js';
-import { IUsersRepository } from './users.repository.interface.js';
+import type { UserModel } from '../generated/prisma/client.js';
+import type { UserEntity } from './user.entity.js';
+import type { IUsersRepository } from './users.repository.interface.js';
 import { TYPES } from '../types.js';
 import { PrismaService } from '../database/prisma.service.js';
 

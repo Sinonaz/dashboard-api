@@ -1,18 +1,18 @@
 import { BaseController } from '../common/base.controller.js';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../errors/http-error.class.js';
-import { ILogger } from '../logger/logger.interface.js';
+import type { ILogger } from '../logger/logger.interface.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types.js';
 import 'reflect-metadata';
-import { IUserController } from './user.controller.interface.js';
+import type { IUserController } from './user.controller.interface.js';
 import { UserLoginDto } from './dto/user-login.dto.js';
 import { UserRegisterDto } from './dto/user-register.dto.js';
-import { UserService } from './user.service.js';
+import type { UserService } from './user.service.js';
 import { ValidateMiddleware } from '../common/validate.middleware.js';
 import pkg from 'jsonwebtoken';
 const jwt = pkg;
-import { IConfigService } from '../config/config.service.interface.js';
+import type { IConfigService } from '../config/config.service.interface.js';
 import { AuthGuard } from '../common/auth.guard.js';
 
 @injectable()
