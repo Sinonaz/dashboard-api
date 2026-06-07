@@ -11,7 +11,7 @@
 		"dev": "nodemon --exec tsx ./src/main.ts",
 		"dev:inspect": "nodemon -e ts,json --exec tsx --inspect=localhost:9229 ./src/main.ts",
 		"test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:e2e": "NODE_OPTIONS=--experimental-vm-modules jest --config jest.e2e.config.ts",
+    "test:e2e": "NODE_OPTIONS=--experimental-vm-modules jest --config jest.e2e.config.ts --coverage",
 		"build": "tsc",
 		"generate": "prisma generate",
 		"lint": "eslint ./src",
