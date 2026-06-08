@@ -5,27 +5,60 @@
 | Action | Command |
 |--------|---------|
 | Build | `npm run build` (=> `tsc`) |
-| Run | `npm start` (=> `node ./dist/main.js`) |
+| Run (prod) | `npm start` (=> `node ./dist/main.js`) |
+| Dev | `npm run dev` (=> `nodemon --exec tsx ./src/main.ts`) |
+| Dev + debug | `npm run dev:inspect` (=> `nodemon` + `tsx --inspect=localhost:9229`) |
+| Lint | `npm run lint` (=> `eslint ./src`) |
+| Lint fix | `npm run lint:fix` (=> `eslint ./src --fix`) |
+| Prisma generate | `npm run generate` (=> `prisma generate`) |
 
-No dev/watch, test, lint, format, or typecheck scripts exist. Do not attempt to run them.
+No test, format, or typecheck scripts exist. Do not attempt to run them.
 
 ## Architecture
 
-- **Express v5** with **manual DI** wired in `src/main.ts:bootstrap()`.
-- Port **8000** hardcoded in `src/app.ts`.
+- **Express v5** with **InversifyJS** DI container wired in `src/main.ts:bootstrap()`.
+  - Bindings defined in `appBindings` (`ContainerModule`), all singletons.
+  - Decorators (`@injectable()`, `@inject()`) used throughout — requires `reflect-metadata` import.
+- Symbol-based tokens in `src/types.ts` (e.g. `TYPES.Application`, `TYPES.ILogger`).
+- Port read from `ConfigService` (`configService.get('PORT')`) — not hardcoded.
 - Controllers extend `BaseController`, register routes via `bindRoutes(IRoute[])`.
 - Error handling via `ExceptionFilter` (Express error middleware) using `HttpError` class.
-- Logger: `tslog` pretty-print wrapper, injected via constructor.
+- Logger: `tslog` pretty-print wrapper (`LoggerService`), injected via constructor.
+- **Prisma** (SQLite) for persistence — managed by `PrismaService` (singleton, `connect()` on init).
+- **JWT auth** via `AuthMiddleware` — verifies Bearer token on every request, sets `req.user`.
+- Request validation via `ValidateMiddleware` using `class-validator` decorators on DTOs.
 
-## Project style (from `src/` and `.idea/codeStyles`)
+### Directory map
 
-- **2-space indent**, semicolons, double quotes (`"`), spaces within braces.
+```
+src/
+  main.ts           — bootstrap(), DI container setup
+  app.ts            — Express app, middleware/routes/filters wiring
+  types.ts          — DI token symbols
+  common/           — BaseController, AuthMiddleware, ValidateMiddleware, IRoute, IMiddleware
+  config/           — ConfigService (reads .env via dotenv)
+  database/         — PrismaService
+  errors/           — HttpError, ExceptionFilter
+  http/             — .http files for manual endpoint testing
+  logger/           — ILogger, LoggerService (tslog wrapper)
+  users/            — UserController, UserService, UsersRepository, UserEntity, DTOs
+  generated/prisma/ — Prisma client output (gitignored)
+prisma/
+  schema.prisma     — UserModel (id, email, password, name), SQLite datasource
+```
+
+## Project style (from `.prettierrc` / `eslint.config.mjs`)
+
+- **Tabs** for indentation, semicolons, **single quotes** (`'`), spaces within braces.
+- `printWidth: 100`, trailing commas (`all`).
 - Use `nodenext` module resolution (`.js` extensions in relative imports).
+- ESLint enforces Prettier formatting + TypeScript recommended rules.
 
 ## Notable gaps / quirks
 
-- No `express.json()` or `body-parser` middleware — POST `req.body` is `undefined`.
-- `experimentalDecorators` / `emitDecoratorMetadata` enabled in tsconfig but **not used**.
-- `dist/src/` is a stale build artifact from a prior `rootDir` config — do not edit.
-- Only dev dep is `@types/express`; no test framework is installed.
+- `experimentalDecorators` / `emitDecoratorMetadata` enabled in tsconfig — **used** by Inversify decorators.
 - `.env` / `.env.local` are gitignored but no example file exists.
+- `dist/src/` is a stale build artifact from a prior `rootDir` config — do not edit. Current `rootDir` is `./src`.
+- Prisma client output goes to `src/generated/prisma/` (gitignored) — must run `npm run generate` after schema changes.
+- SQLite database file `dev.db` is gitignored.
+- No migration or seed scripts defined.
